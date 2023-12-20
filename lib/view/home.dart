@@ -106,10 +106,20 @@ class _HomeScreenState extends State<HomeScreen>
             fontWeight: FontWeight.w900,
           ),
         ),
-        bottom: const TabBar(isScrollable: true, tabs: [
-          Tab(text: "All", height: 8.0),
-          Tab(text: "Islamic", height: 8.0),
-          Tab(text: "Pharaonic", height: 8.0),
+        bottom: TabBar(controller: _tabController, isScrollable: false, tabs: [
+          Tab(
+            // height: 8.0,
+            child: Text("All"),
+          ),
+          Tab(
+            text: "Islamic",
+            // height: 8.0
+          ),
+          Tab(
+            text: "Pharaonic",
+
+            // height: 8.0
+          ),
         ]),
       ),
       resizeToAvoidBottomInset: true,
@@ -160,8 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
                         .where((place) =>
                             place.placeType?.name?.toLowerCase() == 'islamic')
                         .toList(),
-                    constants: Constants()
-                ),
+                    constants: Constants()),
 
                 // Content for the "Pharaonic" tab
                 PlacesListWidget(
