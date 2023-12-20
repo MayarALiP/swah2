@@ -93,96 +93,97 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.amber,
-        centerTitle: true,
-        title: const Text(
-          "Key of tourist",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.amber,
+          centerTitle: true,
+          title: const Text(
+            "Key of tourist",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+            ),
           ),
+          bottom:
+              TabBar(isScrollable: false, controller: _tabController, tabs: [
+            Tab(
+              text: "All",
+            ),
+            Tab(
+              text: "Islamic",
+            ),
+            Tab(
+              text: "Pharaonic",
+            ),
+          ]),
         ),
-        bottom: TabBar(controller: _tabController, isScrollable: false, tabs: [
-          Tab(
-            // height: 8.0,
-            child: Text("All"),
-          ),
-          Tab(
-            text: "Islamic",
-            // height: 8.0
-          ),
-          Tab(
-            text: "Pharaonic",
-
-            // height: 8.0
-          ),
-        ]),
-      ),
-      resizeToAvoidBottomInset: true,
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 2.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Expanded(
-                  child: MySearchBar(
-                    hintText: "  Where to ?",
-                    onSubmitted: _handleSearch,
-                    onChanged: _filterPlaces,
+        resizeToAvoidBottomInset: true,
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 2.0),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Expanded(
+                    child: MySearchBar(
+                      hintText: "  Where to ?",
+                      onSubmitted: _handleSearch,
+                      onChanged: _filterPlaces,
+                    ),
                   ),
-                ),
-                IconButton(
+                  IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _handleSearch(_textController.text);
+                      }),
+                  IconButton(
                     icon: const Icon(
-                      Icons.search,
+                      Icons.camera_alt_rounded,
                       size: 30,
                     ),
                     onPressed: () {
-                      _handleSearch(_textController.text);
-                    }),
-                IconButton(
-                  icon: const Icon(
-                    Icons.camera_alt_rounded,
-                    size: 30,
+                      // add you AI function
+                    },
+                  )
+                ]),
+              ),
+              Expanded(
+                child: TabBarView(controller: _tabController, children: [
+                  // Content for the "All" tab
+                  PlacesListWidget(
+                    placesList: _filteredPlacesList,
+                    constants: Constants(),
                   ),
-                  onPressed: () {
-                    // add you AI function
-                  },
-                )
-              ]),
-            ),
-            Expanded(
-              child: TabBarView(controller: _tabController, children: [
-                // Content for the "All" tab
-                PlacesListWidget(
-                  placesList: _filteredPlacesList,
-                  constants: Constants(),
-                ),
 
-                // Content for the "Islamic" tab
-                PlacesListWidget(
+                  // Content for the "Islamic" tab
+                  PlacesListWidget(
+                      placesList: _filteredPlacesList
+                          .where((place) =>
+                              place.placeType?.name?.toLowerCase() == 'islamic')
+                          .toList(),
+                      constants: Constants()),
+
+                  // Content for the "Pharaonic" tab
+                  PlacesListWidget(
                     placesList: _filteredPlacesList
                         .where((place) =>
-                            place.placeType?.name?.toLowerCase() == 'islamic')
+                            place.placeType?.name?.toLowerCase() == 'Pharonic')
                         .toList(),
-                    constants: Constants()),
-
-                // Content for the "Pharaonic" tab
-                PlacesListWidget(
-                  placesList: _filteredPlacesList
-                      .where((place) =>
-                          place.placeType?.name?.toLowerCase() == 'Pharonic')
-                      .toList(),
-                  constants: Constants(),
-                ),
-              ]),
-            ),
-          ]),
+                    constants: Constants(),
+                  ),
+                ]),
+              ),
+            ]),
+      ),
     );
   }
 }
