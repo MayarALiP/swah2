@@ -44,6 +44,7 @@ class PlaceDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //Image area
               SizedBox(
                 height: 300,
                 width: double.infinity,
@@ -63,18 +64,28 @@ class PlaceDetailsScreen extends StatelessWidget {
                  ),
                ),
              ),
+
               const SizedBox(height: 16.0),
+
+
               //description view area
-              Text(
-                place.description,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
+              SizedBox(
+                height: 150,
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      place.description,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
                 ),
               ),
 
-              const Spacer(),
 
+              const SizedBox(height: 16.0,),
               // rate view area
               Text("rate : ${place.rate}",
                 style: const TextStyle(
@@ -104,15 +115,6 @@ class PlaceDetailsScreen extends StatelessWidget {
               ),
 
               const Spacer(),
-
-              Text("Place type : ${place.placeType!.name}",
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              const Spacer()
 
             ]),
         ),

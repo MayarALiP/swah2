@@ -45,82 +45,88 @@ class _PlacesListWidgetState extends State<PlacesListWidget> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            // Image will appear here
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
-              ),
-              child: Image.network(
-                place.placeImages?.isNotEmpty == true ? place.placeImages![0].image ?? '' : '',
-                width: 300,
-                height: 150,
-                fit: BoxFit.fill,
-              ),
-            ),
-
-            // Name and Description
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name view area
-                  Text(
-                    place.name,
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  // Description view area
-                  Text(
-                    place.description,
-                    style: const TextStyle(
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Show More Button
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Visibility(
-                    visible:place.name != 'Item not found',
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.amberAccent),
-                      ),
-                      child: const Text(
-                        "Show More ..",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlaceDetailsScreen(place: place),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ]),
-            ),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,           children: [
+            _buildPlaceImage(place),
+            _buildNameAndDescription(place),
+            _buildShowMoreButton(place),
           ]),
         ),
       ),
     );
   }
-}
 
+  Widget _buildPlaceImage(Places place) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(8.0),
+        topRight: Radius.circular(8.0),
+      ),
+      child: Image.network(
+        place.placeImages?.isNotEmpty == true ? place.placeImages![0].image ?? '' : '',
+        width: 300,
+        height: 150,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+
+  Widget _buildNameAndDescription(Places place) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            place.name,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            place.description,
+            style: const TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShowMoreButton(Places place) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Visibility(
+            visible: place.name != 'Item not found',
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.amberAccent),
+              ),
+              child: const Text(
+                "Show More ..",
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PlaceDetailsScreen(place: place),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
