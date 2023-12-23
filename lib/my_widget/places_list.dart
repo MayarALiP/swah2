@@ -46,7 +46,8 @@ class _PlacesListWidgetState extends State<PlacesListWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,           children: [
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             _buildPlaceImage(place),
             _buildNameAndDescription(place),
             _buildShowMoreButton(place),

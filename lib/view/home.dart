@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     _tabController = TabController(
       vsync: this,
-      length: 3, // TODO 1 : make this comes from API
+      length: 4,
     );
   }
 
@@ -59,6 +59,10 @@ class _HomeScreenState extends State<HomeScreen>
           .where((place) =>
               place.name.toLowerCase().contains(searchText.toLowerCase()))
           .toList();
+      // Debugging output
+      print('Search Text: $searchText');
+      print('All Places: ${_placesList.length}');
+      print('Filtered Places: ${_filteredPlacesList.length}');
     });
   }
 
@@ -73,17 +77,25 @@ class _HomeScreenState extends State<HomeScreen>
 
       setState(() {
         // If the filtered list is empty, show a message
+        _filteredPlacesList = _placesList
+            .where((place) =>
+            place.name.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
+
+        // Debugging output
+        print('Search Text: $searchText');
+        print('Filtered Places: ${_filteredPlacesList.length}');
+
+        // If the filtered list is empty, show a message
         if (_filteredPlacesList.isEmpty) {
           _filteredPlacesList.add(
             Places(
-              placeImages: [PlaceImages(id: 0, image: Constants().errorImage)],
+              placeImages: [PlaceImages(id: 0, image: Constants.errorImage)],
               name: 'Item not found',
               description: 'Please try again.',
               rate: 0,
-              // open: null,
               status: false,
               entrancePrice: 0,
-              // closed: null,
             ),
           );
         }
@@ -91,10 +103,11 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -109,19 +122,27 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           bottom:
-              TabBar(isScrollable: false, controller: _tabController, tabs: [
-            Tab(
-              text: "All",
-            ),
-            Tab(
-              text: "Islamic",
-            ),
-            Tab(
-              text: "Pharaonic",
-            ),
-          ]),
+               TabBar(isScrollable: false,
+                  controller: _tabController,
+
+                   tabs: const [
+                  Tab(
+                    text: "All",
+                  ),
+                  Tab(
+                    text: "Islamic",
+                  ),
+                  Tab(
+                    text: "Pharaonic",
+                  ),
+
+                   Tab (
+                       text: "Christian"
+                   ) ,
+                ]),
         ),
         resizeToAvoidBottomInset: true,
+
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -129,35 +150,38 @@ class _HomeScreenState extends State<HomeScreen>
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 2.0),
                 child:
-                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Expanded(
-                    child: MySearchBar(
-                      hintText: "  Where to ?",
+                    Row(mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                        Expanded(
+                          child: MySearchBar(
+                        hintText: "  Where to ?",
                       onSubmitted: _handleSearch,
                       onChanged: _filterPlaces,
                     ),
                   ),
-                  IconButton(
-                      icon: const Icon(
-                        Icons.search,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        _handleSearch(_textController.text);
-                      }),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.camera_alt_rounded,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      // add you AI function
-                    },
-                  )
+                        IconButton(
+                          icon: const Icon(
+                            Icons.search,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            _handleSearch(_textController.text);
+                          }),
+                        IconButton(
+                            icon: const Icon(
+                              Icons.camera_alt_rounded,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              // add you AI function
+                            },
+                          )
                 ]),
               ),
               Expanded(
-                child: TabBarView(controller: _tabController, children: [
+                child: TabBarView(
+                    controller: _tabController,
+                    children: [
                   // Content for the "All" tab
                   PlacesListWidget(
                     placesList: _filteredPlacesList,
@@ -168,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen>
                   PlacesListWidget(
                       placesList: _filteredPlacesList
                           .where((place) =>
-                              place.placeType?.name?.toLowerCase() == 'islamic')
+                              place.placeType?.id == 2)
                           .toList(),
                       constants: Constants()),
 
@@ -176,10 +200,19 @@ class _HomeScreenState extends State<HomeScreen>
                   PlacesListWidget(
                     placesList: _filteredPlacesList
                         .where((place) =>
-                            place.placeType?.name?.toLowerCase() == 'Pharonic')
+                            place.placeType?.id == 1)
                         .toList(),
                     constants: Constants(),
                   ),
+
+                  // Content for the "Christian" tab
+
+                  PlacesListWidget(
+                    placesList: _filteredPlacesList
+                        .where((place) =>
+                            place.placeType?.id == 3)
+                        .toList(),
+                    constants: Constants(),),
                 ]),
               ),
             ]),
